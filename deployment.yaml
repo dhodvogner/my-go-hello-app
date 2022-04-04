@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: my-go-hello-app-namespace
+  labels:
+    name: my-go-hello-app
+    razee/watch-resource: detail
+
+  
+---
+  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-go-hello-app-deployment
+  namespace: my-go-hello-app-namespace
+  labels:
+    app: my-go-hello-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-go-hello-app
+  template:
+    metadata:
+      labels:
+        app: my-go-hello-app
+    spec:
+      containers:
+      - name: my-go-hello-app
+        image: docker.io/dhodvogner/my-go-hello-app:latest
+        ports:
+        - containerPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-go-hello-app-service
+  namespace: my-go-hello-app-namespace
+spec:
+  selector:
+    app: my-go-hello-app
+  ports:
+    - port: 8080 
+
+---
+
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: my-go-hello-app-route
+  namespace: my-go-hello-app-namespace
+  labels:
+    razee/watch-resource: detail
+spec:
+  port:
+    targetPort: 8080
+  to:
+    kind: Service
+    name: my-go-hello-app-service
