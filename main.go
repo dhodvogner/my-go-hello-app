@@ -23,4 +23,5 @@ func HelloServer(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "*****************************************************\n")
 	fmt.Fprintf(w, "Hello World!\n")
 	fmt.Fprintf(w, "And thanks for all the fish!\n")
+	fmt.Fprintf(w, "And thanks for all the fish!\n")
 }
